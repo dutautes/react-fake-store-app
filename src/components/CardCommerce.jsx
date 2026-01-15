@@ -1,14 +1,14 @@
 import { Card } from "flowbite-react";
 
-export default function CardCommerce() {
+export default function CardCommerce({ item }) {
     return (
         <Card
       className="max-w-sm"
-      imgAlt="Apple Watch Series 7 in colors pink, silver, and black"
-      imgSrc="https://tse4.mm.bing.net/th/id/OIP.Gw2o5Fr2hPDeruhVGw4T2wHaFW?w=249&h=180&c=7&r=0&o=7&cb=defcache2&dpr=1.3&pid=1.7&rm=3&defcache=1">
+      imgAlt={item.title}
+      imgSrc={item.images[0]}>
       <a href="#">
         <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
-          Sepatu X Spongebob LIMITED EDITION
+          {item.title}
         </h5>
       </a>
       <div className="mb-5 mt-2.5 flex items-center">
@@ -57,7 +57,7 @@ export default function CardCommerce() {
         </span>
       </div>
       <div className="flex items-center justify-between">
-        <span className="text-3xl font-bold text-gray-900 dark:text-white">Rp 500.000</span>
+        <span className="text-3xl font-bold text-gray-900 dark:text-white">Rp {item.price}</span>
         <a
           href="#"
           className="rounded-lg bg-cyan-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-cyan-800 focus:outline-none focus:ring-4 focus:ring-cyan-300 dark:bg-cyan-600 dark:hover:bg-cyan-700 dark:focus:ring-cyan-800"
