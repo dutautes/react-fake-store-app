@@ -2,22 +2,32 @@ import {
   Avatar,
   Dropdown,
   DropdownDivider,
-  DropdownHeader,
+  DropdownHeader, 
   DropdownItem,
   Navbar,
   NavbarBrand,
-  NavbarCollapse,
-  NavbarLink,
   NavbarToggle,
+  Button
 } from "flowbite-react";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FcPaid } from "react-icons/fc";
 import imageLogo from "../assets/logo.webp";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { AuthContext } from '../contexts/AuthContext';
+import { CartContext } from "../contexts/CartContext";
 
 export default function NavbarComp() {
+  // menggunakan context
+  const { isLogin, logout } = useContext(AuthContext);
   const [users, setUsers] = useState([]);
+  const navigate = useNavigate();
 
+  function handleLogout() {
+    // panggil func logout dari context
+    logout();
+    // pindahkan halaman, navigate tidak bisa digunakan di context
+    navigate("/");
+  }
 
   async function getUsers() {
     const url = "https://api.escuelajs.co/api/v1/users/1";
@@ -37,6 +47,8 @@ export default function NavbarComp() {
           useEffect(() => {
             getUsers();
           }, []);
+        
+          const {cart} = useContext(CartContext);  
 
     return (
          <Navbar fluid rounded className="py-4">
@@ -47,7 +59,13 @@ export default function NavbarComp() {
       </NavbarBrand>
       </Link>
       <div className="flex md:order-2 gap-2">
-        <FcPaid className="text-3xl"/>
+        <Link to="/cart" style={{position: "relative"}}>
+        <span className="bg-red-200 text-red-500 px-2 rounded-full" style={{position: "absolute", right: "20px", bottom: "20px"}}>{cart.length}</span>
+          <FcPaid className="text-4xl mt-2"/>
+        </Link>
+        {
+          isLogin && (<Button color="red" className="ms-3" onClick={handleLogout}>Logout</Button>)
+        }
         <Dropdown
           arrowIcon={false}
           inline
@@ -69,15 +87,6 @@ export default function NavbarComp() {
         </Dropdown>
         <NavbarToggle />
       </div>
-      <NavbarCollapse>
-        <Link to="/">
-          <NavbarLink href="#" active>Home</NavbarLink>
-        </Link>
-        <NavbarLink href="#">About</NavbarLink>
-        <NavbarLink href="#">Services</NavbarLink>
-        <NavbarLink href="#">Pricing</NavbarLink>
-        <NavbarLink href="#">Contact</NavbarLink>
-      </NavbarCollapse>
     </Navbar>
     )
 }
