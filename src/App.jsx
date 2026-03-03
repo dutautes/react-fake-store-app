@@ -1,8 +1,9 @@
 import BannerComp from "./components/BannerComp"
 import CardList from "./components/CardList"
-import NavbarComp from "./components/NavbarComp"
 import { Button } from "flowbite-react"
 import { useState, useEffect } from 'react'
+import { useLocation } from 'react-router-dom';
+import { HiCheckCircle } from "react-icons/hi";
 import { Spinner } from "flowbite-react";
 import { Link } from 'react-router-dom';
 
@@ -10,6 +11,21 @@ function App() {
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const location = useLocation(); 
+  const [modalSukses, setModalSukses] = useState(false);
+
+  useEffect(() => {
+    // Cek kalo ada state openModal dari navigasi sebelumnya
+    if (location.state?.openModal) {
+      setModalSukses(true); // munculin modal
+      setTimeout(() => { // matiin modal dengan set false setelah 1dtk
+        setModalSukses(false);
+      }, 2000);
+      
+      window.history.replaceState({}, document.title); // mengosongkan value state 
+    }
+  }, [location]);
 
   async function getData() {
     const url = "https://api.escuelajs.co/api/v1/categories";
@@ -59,6 +75,21 @@ function App() {
 
   return (
     <>
+    {modalSukses && (
+      <div className="fixed inset-0 z-50 flex items-center justify-center">
+        <div className="bg-white dark:bg-gray-800 rounded-lg p-8 shadow-xl max-w-md w-96">
+          <div className="text-center">
+            <HiCheckCircle className="mx-auto mb-4 h-14 w-14 text-green-600" />
+            <h3 className="mb-3 text-lg font-semibold text-gray-900 dark:text-white">
+              Pembelian Berhasil Dilakukan!
+            </h3>
+            <p className="text-sm text-gray-600 dark:text-gray-300">
+              Terima kasih telah melakukan pembelian.
+            </p>
+          </div>
+        </div>
+      </div>
+    )}
       <BannerComp />
       <CardList data={categories} type="category" />
       <CardList data={products} type="product" >  

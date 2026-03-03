@@ -5,6 +5,7 @@ import Users from "../pages/Users";
 import ProductCategory from "../pages/ProductCategory";
 import Login from "../pages/Login";
 import Cart from "../pages/Cart";
+import Checkout from "../pages/Checkout";
 import Template from "../Template";
 import { auth } from '../middleware/auth';
 
@@ -29,6 +30,7 @@ export const router = createBrowserRouter([
         // mengisi <Outlet /> di Template.jsx
         children: [
             { path: "/cart", element: <Cart />},
+            { path: "/checkout", element: <Checkout />},
         ]
     }
 ]);
